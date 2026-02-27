@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hydrosol HS-2000 | Technical View Selector</title>
+    <title>HS-2000 | Interactive View</title>
     <style>
+        :root {
+            --primary: #0055ff;
+            --accent: #00f2ff;
+            --dark: #0f172a;
+        }
+
         body {
             margin: 0;
             height: 100vh;
@@ -12,113 +19,314 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: #ffffff;
-            font-family: 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at center, #ffffff 0%, #e2e8f0 100%);
+            font-family: 'Inter', sans-serif;
             overflow: hidden;
+            perspective: 1500px;
         }
 
-        /* --- THE VIEWER STAGE --- */
-        .viewer-container {
-            perspective: 1200px;
+        /* --- THE BACK NAV --- */
+        .back-nav {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 1000;
+            text-decoration: none;
+            background: #000;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: 0.3s;
+        }
+
+        .back-nav:hover {
+            transform: scale(1.05);
+            background: var(--primary);
+        }
+
+        h1 {
+            position: absolute;
+            top: 40px;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        /* --- 3D STAGE --- */
+        .stage {
             width: 400px;
             height: 500px;
             position: relative;
+            transform-style: preserve-3d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* The "Object" that rotates */
+        #rotation-wrapper {
+            width: 320px;
+            height: 420px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
         #hydrosol-model {
             width: 100%;
             height: 100%;
-            position: absolute;
+            position: relative;
             transform-style: preserve-3d;
-            transition: transform 1.2s cubic-bezier(0.6, 0, 0.4, 1);
+            animation: float 6s ease-in-out infinite;
         }
 
-        /* Common Face Styling */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        /* --- FACES --- */
         .face {
             position: absolute;
-            width: 400px;
-            height: 500px;
-            background: white;
-            border: 2px solid #eee;
+            width: 320px;
+            height: 420px;
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             backface-visibility: hidden;
-            box-shadow: 0 0 40px rgba(0,0,0,0.05);
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.02);
+            border-radius: 4px;
         }
 
-        /* Image Sizing */
         .face img {
-            max-width: 90%;
-            max-height: 90%;
-            object-fit: contain;
+            max-width: 85%;
+            max-height: 85%;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
         }
 
-        /* Positioning Faces in 3D Space */
-        .front  { transform: rotateY(0deg) translateZ(200px); }
-        .back   { transform: rotateY(180deg) translateZ(200px); }
-        .top    { transform: rotateX(90deg) translateZ(250px); height: 400px; }
-        .bottom { transform: rotateX(-90deg) translateZ(250px); height: 400px; }
+        /* Spatial Positioning */
+        .front {
+            transform: rotateY(0deg) translateZ(160px);
+        }
 
-        /* --- UI CONTROLS --- */
+        .back {
+            transform: rotateY(180deg) translateZ(160px);
+        }
+
+        .top {
+            transform: rotateX(90deg) translateZ(160px);
+            height: 320px;
+        }
+
+        .bottom {
+            transform: rotateX(-90deg) translateZ(260px);
+            height: 320px;
+        }
+
+        /* Glass Sides */
+        .side {
+            position: absolute;
+            width: 320px;
+            height: 420px;
+            background: linear-gradient(to bottom, #f8fafc, #e2e8f0);
+            opacity: 0.8;
+            border-radius: 4px;
+        }
+
+        .right {
+            transform: rotateY(90deg) translateZ(160px);
+        }
+
+        .left {
+            transform: rotateY(-90deg) translateZ(160px);
+        }
+
+        /* --- SHADOW --- */
+        .shadow {
+            position: absolute;
+            bottom: -60px;
+            width: 300px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            filter: blur(20px);
+            transform: rotateX(90deg);
+        }
+
+        /* --- CONTROLS --- */
         .controls {
-            margin-top: 50px;
+            position: absolute;
+            bottom: 100px;
             display: flex;
-            gap: 15px;
-            z-index: 10;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            z-index: 20;
         }
 
         button {
-            padding: 12px 24px;
-            border: 2px solid #0055ff;
-            background: white;
-            color: #0055ff;
-            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-weight: 700;
+            font-size: 11px;
             text-transform: uppercase;
             cursor: pointer;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-
-        button:hover {
-            background: #0055ff;
-            color: white;
+            border-radius: 40px;
+            transition: 0.3s;
         }
 
         button.active {
-            background: #0055ff;
+            background: var(--primary);
             color: white;
-            box-shadow: 0 0 15px rgba(0, 85, 255, 0.4);
         }
 
-        .info-panel {
-            margin-top: 20px;
-            text-align: center;
-            color: #666;
+        /* --- INFO PANEL --- */
+        .info-card {
+            position: absolute;
+            right: 40px;
+            width: 250px;
+            padding: 25px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--primary);
+            z-index: 20;
+        }
+
+        .info-card h4 {
+            margin: 0 0 10px;
+            font-size: 14px;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-card p {
+            margin: 0;
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        /* --- HOTSPOTS --- */
+        .hotspot {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 15px var(--accent);
+            cursor: pointer;
+            z-index: 10;
+            transition: 0.3s;
+            animation: pulse 2s infinite;
+        }
+
+        .hotspot:hover {
+            transform: scale(1.3);
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 242, 255, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(0, 242, 255, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 242, 255, 0);
+            }
+        }
+
+        /* --- HEADER LOGO --- */
+        .header {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .logo {
+            height: 80px;
+            /* Adjust size as needed */
+            width: auto;
+        }
+
+        .brand-name {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--dark);
+            letter-spacing: 1px;
         }
     </style>
 </head>
+
 <body>
-    <a href="index.html" style="position: fixed; top: 20px; left: 20px; z-index: 9999; text-decoration: none; background: #000; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; font-family: sans-serif; font-size: 12px; border: 1px solid #444;">← HUB</a>
 
-    <h1>HYDROSOL HS-2000</h1>
+    <a href="index.html" class="back-nav">← BACK TO HUB</a>
 
-    <div class="viewer-container">
-        <div id="hydrosol-model">
-            <div class="face front">
-                <img src="hydrosol-front-view.png" alt="Front View">
-            </div>
-            <div class="face back">
-                <img src="hydrosol-back-view.png" alt="Back View">
-            </div>
-            <div class="face top">
-                <img src="hydrosol-top-view.png" alt="Top View">
-            </div>
-            <div class="face bottom">
-                <img src="hydrosol-bottom-view.png" alt="Bottom View">
+    <h1>HS-2000 PARTS VIEWER</h1>
+
+    <div class="header">
+        <img src="logo.png" alt="SunSip Logo" class="logo">
+        <span class="brand-name">SunSip Water Systems</span>
+    </div>
+
+    <div class="stage">
+        <div class="shadow"></div>
+        <div id="rotation-wrapper">
+            <div id="hydrosol-model">
+                <div class="face front">
+                    <img src="hydrosol-front-view.png">
+                    <div class="hotspot" style="top: 55%; left: 45%;"
+                        onclick="showInfo('Cleaning System', 'Contains the filter and UV light to remove germs and dirt.')">
+                    </div>
+                </div>
+
+                <div class="face back">
+                    <img src="hydrosol-back-view.png">
+                    <div class="hotspot" style="top: 63%; left: 30%;"
+                        onclick="showInfo('Power Cable Plug', 'Where you plug in the USB-C cable to charge the machine.')">
+                    </div>
+                </div>
+
+                <div class="face top"><img src="hydrosol-top-view.png"></div>
+                <div class="face bottom"><img src="hydrosol-bottom-view.png"></div>
+
+                <div class="side left"></div>
+                <div class="side right"></div>
             </div>
         </div>
+    </div>
+
+    <div class="info-card">
+        <h4 id="view-title">Front View</h4>
+        <p id="view-desc">Click on the <span style="color:var(--accent); font-weight:bold;">glowing blue dots</span> to
+            learn about each part.</p>
     </div>
 
     <div class="controls">
@@ -128,38 +336,50 @@
         <button onclick="rotateTo('bottom', this)">Bottom</button>
     </div>
 
-    <div class="info-panel">
-        <p id="view-desc">Select a view to inspect the HS-2000 hardware.</p>
-    </div>
-
     <script>
-        const model = document.getElementById('hydrosol-model');
+        const wrapper = document.getElementById('rotation-wrapper');
+        const title = document.getElementById('view-title');
         const desc = document.getElementById('view-desc');
 
+        // ... inside your <script> tag
+
         function rotateTo(view, btn) {
-            // Remove active class from all buttons
             document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            // Apply rotation based on view
-            switch(view) {
+            switch (view) {
                 case 'front':
-                    model.style.transform = 'rotateY(0deg)';
-                    desc.innerText = "FRONT VIEW: Displaying Reservoir and UI Panel.";
+                    wrapper.style.transform = 'rotateY(0deg) rotateX(0deg)';
+                    // Update title and description here
+                    updateText("Front View", "Shows the water tank and screen.");
                     break;
                 case 'back':
-                    model.style.transform = 'rotateY(180deg)';
-                    desc.innerText = "BACK VIEW: Displaying Data Ports and Support Bracket.";
+                    wrapper.style.transform = 'rotateY(180deg) rotateX(0deg)';
+                    // Update title and description here
+                    updateText("Back View", "Shows where the power cable plugs in.");
                     break;
                 case 'top':
-                    model.style.transform = 'rotateX(-90deg)';
-                    desc.innerText = "TOP VIEW: Inspecting Solar Array Grid.";
+                    wrapper.style.transform = 'rotateX(-90deg) rotateY(0deg)';
+                    // Update title and description here
+                    updateText("Top View", "Shows the solar panels that charge the battery.");
                     break;
                 case 'bottom':
-                    model.style.transform = 'rotateX(90deg)';
-                    desc.innerText = "BOTTOM VIEW: Inspecting Intake Valves and QR Port.";
+                    wrapper.style.transform = 'rotateX(90deg) rotateY(0deg)';
+                    // Update title and description here
+                    updateText("Bottom View", "Shows the water intake valves.");
                     break;
             }
+        }
+        // ...
+
+        function showInfo(t, d) {
+            title.innerText = t;
+            desc.innerText = d;
+        }
+
+        function updateText(t, d) {
+            title.innerText = t;
+            desc.innerText = d;
         }
     </script>
 </body>
