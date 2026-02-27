@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hydrosol | Hardware Simulation</title>
+    <link rel="stylesheet" href="Style.css">
+    <style>
+        /* Back button to return to index.html */
+        .back-nav {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            text-decoration: none;
+            background: #000;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: sans-serif;
+            border: 1px solid #444;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-nav">← BACK TO HUB</a>
+
+    <div class="dashboard">
+        <h1>HYDROSOL</h1>
+        <div id="status-light" class="light green"></div>
+        <h2 id="status-text">SYSTEM OPTIMAL</h2>
+        <div class="impact-stats">
+            <p>Total Purified: <span id="liters-val">0 L</span></p>
+        </div>
+    </div>
+
+    <div class="simulation-hub">
+        <div class="hardware-container">
+            <h3>Physical Unit Interface</h3>
+            <a href="2dviewer.html" target="_self" style="text-decoration: none; cursor: zoom-in;">
+                <div class="unit-image-wrapper">
+                    <img src="hydrosol-front-view.png" alt="Hydrosol Unit" class="unit-base-img">
+                    
+                    <div id="carbon-zone" class="hotspot" onclick="event.stopPropagation(); attemptRepair('carbon')">
+                        <span class="label">Carbon Pod</span> <div class="mini-bar"><div id="bar-carbon" class="fill"></div></div>
+                    </div>
+
+                    <div id="uv-zone" class="hotspot" onclick="event.stopPropagation(); attemptRepair('uv')">
+                        <span class="label">UV-C Safety</span> <div class="mini-bar"><div id="bar-uv" class="fill"></div></div>
+                    </div>
+                </div>
+            </a>
+            <p class="hint"><i>Tap a blinking component to snap-in a replacement.</i></p>
+            <p class="hint"><i>Click the unit to open the Multi-Side 360° Gallery.</i></p>
+        </div>
+
+        <div class="side-panel">
+            <div class="inventory-card">
+                <h4>📦 Spare Parts Kit</h4>
+                <div class="inventory-item">
+                    <span>Carbon: <strong id="inv-carbon">2</strong></span>
+                    <button onclick="buyPod('carbon')">+ Order</button>
+                </div>
+                <div class="inventory-item">
+                    <span>UV-C: <strong id="inv-uv">1</strong></span>
+                    <button onclick="buyPod('uv')">+ Order</button>
+                </div>
+            </div>
+
+            <div class="controls-panel">
+                <button class="action-btn" onclick="drainSystem(10)">🚰 Process 10L Water</button>
+                <button class="action-btn" onclick="toggleAutoSim()">🔄 Toggle Auto-Wear</button>
+            </div>
+
+            <div class="system-log">
+                <h3>Diagnostic Console</h3> 
+                <div id="console-output">> Hardware Link Established... [READY]</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="manual-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeManual()">&times;</span>
+            <h2>⚠️ REPAIR REQUIRED</h2>
+            <div class="manual-steps">
+                <div class="step">1. 🛒 Ensure you have spare parts.</div>
+                <div class="step">2. 🔴 Locate the blinking pod on the unit.</div>
+                <div class="step">3. 👆 Click it to 'Snap-In' the new one.</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="Script.js"></script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydrosol HS-2000 | Technical View Selector</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+        }
+
+        /* --- THE VIEWER STAGE --- */
+        .viewer-container {
+            perspective: 1200px;
+            width: 400px;
+            height: 500px;
+            position: relative;
+        }
+
+        /* The "Object" that rotates */
+        #hydrosol-model {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: transform 1.2s cubic-bezier(0.6, 0, 0.4, 1);
+        }
+
+        /* Common Face Styling */
+        .face {
+            position: absolute;
+            width: 400px;
+            height: 500px;
+            background: white;
+            border: 2px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            box-shadow: 0 0 40px rgba(0,0,0,0.05);
+        }
+
+        /* Image Sizing */
+        .face img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        /* Positioning Faces in 3D Space */
+        .front  { transform: rotateY(0deg) translateZ(200px); }
+        .back   { transform: rotateY(180deg) translateZ(200px); }
+        .top    { transform: rotateX(90deg) translateZ(250px); height: 400px; }
+        .bottom { transform: rotateX(-90deg) translateZ(250px); height: 400px; }
+
+        /* --- UI CONTROLS --- */
+        .controls {
+            margin-top: 50px;
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: 2px solid #0055ff;
+            background: white;
+            color: #0055ff;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #0055ff;
+            color: white;
+        }
+
+        button.active {
+            background: #0055ff;
+            color: white;
+            box-shadow: 0 0 15px rgba(0, 85, 255, 0.4);
+        }
+
+        .info-panel {
+            margin-top: 20px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-nav">← BACK TO HUB</a>
+
+    <h1>HYDROSOL HS-2000</h1>
+
+    <div class="viewer-container">
+        <div id="hydrosol-model">
+            <div class="face front">
+                <img src="hydrosol-front-view.png" alt="Front View">
+            </div>
+            <div class="face back">
+                <img src="hydrosol-back-view.png" alt="Back View">
+            </div>
+            <div class="face top">
+                <img src="hydrosol-top-view.png" alt="Top View">
+            </div>
+            <div class="face bottom">
+                <img src="hydrosol-bottom-view.png" alt="Bottom View">
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="rotateTo('front', this)" class="active">Front</button>
+        <button onclick="rotateTo('back', this)">Back</button>
+        <button onclick="rotateTo('top', this)">Top</button>
+        <button onclick="rotateTo('bottom', this)">Bottom</button>
+    </div>
+
+    <div class="info-panel">
+        <p id="view-desc">Select a view to inspect the HS-2000 hardware.</p>
+    </div>
+
+    <script>
+        const model = document.getElementById('hydrosol-model');
+        const desc = document.getElementById('view-desc');
+
+        function rotateTo(view, btn) {
+            // Remove active class from all buttons
+            document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Apply rotation based on view
+            switch(view) {
+                case 'front':
+                    model.style.transform = 'rotateY(0deg)';
+                    desc.innerText = "FRONT VIEW: Displaying Reservoir and UI Panel.";
+                    break;
+                case 'back':
+                    model.style.transform = 'rotateY(180deg)';
+                    desc.innerText = "BACK VIEW: Displaying Data Ports and Support Bracket.";
+                    break;
+                case 'top':
+                    model.style.transform = 'rotateX(-90deg)';
+                    desc.innerText = "TOP VIEW: Inspecting Solar Array Grid.";
+                    break;
+                case 'bottom':
+                    model.style.transform = 'rotateX(90deg)';
+                    desc.innerText = "BOTTOM VIEW: Inspecting Intake Valves and QR Port.";
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>

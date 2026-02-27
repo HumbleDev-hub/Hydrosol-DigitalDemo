@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydrosol | Sample 3d Model</title>
+    <style>
+        /* --- STYLING & UI OVERLAY --- */
+        body {
+            margin: 0;
+            background: #ffffff;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #ui-layer {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .panel {
+            background: rgba(248, 249, 250, 0.9);
+            backdrop-filter: blur(5px);
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 8px solid #0055ff;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            width: 250px;
+        }
+
+        .header {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin: 4px 0;
+            color: #444;
+        }
+
+        .value {
+            font-weight: bold;
+            color: #0077ff;
+        }
+
+        #system-log {
+            position: absolute;
+            bottom: 25px;
+            right: 25px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ffcc;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            font-size: 11px;
+            border-radius: 5px;
+            width: 300px;
+            height: 150px;
+            overflow-y: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="index.html" class="back-nav">← BACK TO HUB</a>
+
+    <div id="ui-layer">
+        <div class="panel">
+            <div class="header">HYDROSOL</div>
+            <div class="stat-row"><span>RESERVOIR:</span> <span class="value">100% (FULL)</span></div>
+            <div class="stat-row"><span>UV-C OUTPUT:</span> <span class="value">OPTIMAL</span></div>
+            <div class="stat-row"><span>SOLAR CHARGE:</span> <span class="value">ACTIVE</span></div>
+        </div>
+    </div>
+
+    <div id="system-log">
+        > INITIALIZING CORE...<br>
+        > CALIBRATING OPTICAL SENSORS...<br>
+        > RESERVOIR SEAL VERIFIED...<br>
+        > SOLAR GRID ONLINE...<br>
+        > FLOW RATE: 2.4L/MIN...
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // --- GLOBAL CONFIGURATION ---
+        const CONFIG = {
+            colors: {
+                silver: 0xd1d1d1,
+                black: 0x1a1a1a,
+                glass: 0x004d4f, // Distinct Smoky Cyan
+                water: 0x00aaff,
+                uvc: 0x00f2ff,
+                solar: 0x0044ff  // Blue Solar Panel
+            },
+            dimensions: {
+                width: 4.0,
+                height: 6.5,
+                depth: 3.8,
+                radius: 0.6
+            }
+        };
+
+        // --- SCENE INITIALIZATION ---
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(10, 8, 12);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        renderer.toneMapping = THREE.ReinhardToneMapping;
+        document.body.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+
+
+        // --- LIGHTING RIG ---
+        const ambient = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambient);
+
+        const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        keyLight.position.set(5, 15, 10);
+        keyLight.castShadow = true;
+        scene.add(keyLight);
+
+        const rimLight = new THREE.PointLight(0x00aaff, 1, 20);
+        rimLight.position.set(-5, 5, -5);
+        scene.add(rimLight);
+
+        // --- MASTER MATERIAL LIBRARY ---
+        const materials = {
+            silver: new THREE.MeshStandardMaterial({
+                color: CONFIG.colors.silver, metalness: 0.7, roughness: 0.2
+            }),
+            solar: new THREE.MeshStandardMaterial({
+                color: CONFIG.colors.solar, metalness: 0.9, roughness: 0.1
+            }),
+            glass: new THREE.MeshPhysicalMaterial({
+                color: CONFIG.colors.glass, transmission: 0.9, transparent: true,
+                opacity: 0.5, thickness: 2.0, roughness: 0.05
+            }),
+            water: new THREE.MeshPhongMaterial({
+                color: CONFIG.colors.water, transparent: true, opacity: 0.35, shininess: 150
+            }),
+            black: new THREE.MeshStandardMaterial({
+                color: CONFIG.colors.black, roughness: 0.9
+            }),
+            uvc: new THREE.MeshStandardMaterial({
+                color: CONFIG.colors.uvc, emissive: CONFIG.colors.uvc, emissiveIntensity: 2.0
+            }),
+            carbon: new THREE.MeshStandardMaterial({
+                color: 0x222222, roughness: 1.0
+            })
+
+            
+        };
+
+        // --- GEOMETRY UTILITIES ---
+        const createHS2000Chassis = (w, h, d, r, mat) => {
+            const shape = new THREE.Shape();
+            shape.moveTo(-w / 2 + r, -d / 2);
+            shape.lineTo(w / 2 - r, -d / 2);
+            shape.absarc(w / 2 - r, -d / 2 + r, r, -Math.PI / 2, 0);
+            shape.lineTo(w / 2, d / 2 - r);
+            shape.absarc(w / 2 - r, d / 2 - r, r, 0, Math.PI / 2);
+            shape.lineTo(-w / 2 + r, d / 2);
+            shape.absarc(-w / 2 + r, d / 2 - r, r, Math.PI / 2, Math.PI);
+            shape.lineTo(-w / 2, -d / 2 + r);
+            shape.absarc(-w / 2 + r, -d / 2 + r, r, Math.PI, Math.PI * 1.5);
+
+            const extrudeSettings = { depth: h, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.05 };
+            const geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+            geo.rotateX(Math.PI / 2);
+            return new THREE.Mesh(geo, mat);
+        };
+
+        const hydrosol = new THREE.Group();
+
+        // 1. BASE UNIT & INTERFACES
+        const base = createHS2000Chassis(4, 1.4, 3.8, 0.6, materials.silver);
+        base.position.y = -1.5;
+        hydrosol.add(base);
+
+        // Front Interface Panel
+        const frontPanel = new THREE.Mesh(new THREE.BoxGeometry(3.4, 1.0, 0.05), materials.black);
+        frontPanel.position.set(0, -1.5, 1.91);
+        hydrosol.add(frontPanel);
+
+        // 2. REAR CONNECTIVITY
+        const backPanel = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.8, 0.05), materials.black);
+        backPanel.position.set(0, -1.5, -1.91);
+        hydrosol.add(backPanel);
+
+        // 3. TOP LID & SOLAR GRID
+        const lid = createHS2000Chassis(4, 0.5, 3.8, 0.6, materials.silver);
+        lid.position.y = 3.2;
+        hydrosol.add(lid);
+
+        const solarGrid = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 3.2), materials.solar);
+        solarGrid.rotation.x = -Math.PI / 2;
+        solarGrid.position.y = 3.46;
+        hydrosol.add(solarGrid);
+
+        // 4. THE RESERVOIR & WATER
+        const glassHousing = createHS2000Chassis(3.95, 3.8, 3.75, 0.5, materials.glass);
+        glassHousing.position.y = 0.85;
+        hydrosol.add(glassHousing);
+
+        // Water is slightly smaller (3.88 vs 3.95) so it never overlaps the glass
+        const waterVolume = createHS2000Chassis(3.88, 3.75, 3.68, 0.48, materials.water);
+        waterVolume.position.y = 0.83;
+        hydrosol.add(waterVolume);
+
+        // 5. INTERNAL PODS
+        const podGeo = new THREE.CylinderGeometry(0.5, 0.5, 3.8, 32);
+
+        const carbonPod = new THREE.Mesh(podGeo, materials.carbon);
+        carbonPod.position.set(-1.1, 0.85, 0);
+        hydrosol.add(carbonPod);
+
+        const uvcPod1 = new THREE.Mesh(podGeo, materials.uvc);
+        uvcPod1.position.set(0.1, 0.85, 0);
+        hydrosol.add(uvcPod1);
+
+        const uvcPod2 = new THREE.Mesh(podGeo, materials.uvc);
+        uvcPod2.position.set(1.3, 0.85, 0);
+        hydrosol.add(uvcPod2);
+
+        // 6. BOTTOM COMPONENTS
+        const intake1 = new THREE.Mesh(new THREE.CircleGeometry(0.4, 32), materials.uvc);
+        intake1.rotation.x = Math.PI / 2;
+        intake1.position.set(-1, -2.25, 0.8);
+        hydrosol.add(intake1);
+
+        const intake2 = intake1.clone();
+        intake2.position.set(1, -2.25, 0.8);
+        hydrosol.add(intake2);
+
+        // 7. EXTERNAL FIXTURES
+        const faucetBase = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.6), materials.silver);
+        faucetBase.position.set(0, -1.8, 2.2);
+        hydrosol.add(faucetBase);
+
+        scene.add(hydrosol);
+
+        // 8. BUBBLE PARTICLE SYSTEM
+        const bubbleCount = 40;
+        const bubbles = new THREE.Group();
+        const bubbleGeo = new THREE.SphereGeometry(0.04, 8, 8);
+        const bubbleMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.6 });
+
+        for (let i = 0; i < bubbleCount; i++) {
+            const b = new THREE.Mesh(bubbleGeo, bubbleMat);
+            b.position.set(
+                (Math.random() - 0.5) * 3,
+                Math.random() * 3.5 - 1,
+                (Math.random() - 0.5) * 3
+            );
+            b.userData.speed = 0.01 + Math.random() * 0.02;
+            bubbles.add(b);
+        }
+        hydrosol.add(bubbles);
+
+        // --- ANIMATION ENGINE ---
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const delta = clock.getElapsedTime();
+
+            // Pulse UV Glow
+            materials.uvc.emissiveIntensity = 1.5 + Math.sin(delta * 2) * 0.5;
+
+            // Animate Bubbles
+            bubbles.children.forEach(b => {
+                b.position.y += b.userData.speed;
+                if (b.position.y > 2.5) b.position.y = -1;
+            });
+
+            // Gentle Float Effect
+            hydrosol.position.y = Math.sin(delta * 0.5) * 0.1;
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // --- WINDOW RESIZE ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+
+        // LOG UPDATER
+        setInterval(() => {
+            const log = document.getElementById('system-log');
+            const lines = log.innerHTML.split('<br>');
+            if (lines.length > 8) lines.shift();
+            log.innerHTML = lines.join('<br>') + `> TEMP: ${(22 + Math.random()).toFixed(1)}°C...<br>`;
+        }, 3000);
+
+    </script>
+</body>
+
+</html>

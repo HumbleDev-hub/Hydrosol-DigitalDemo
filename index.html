@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydrosol | Command Center</title>
+    <style>
+        :root {
+            --primary: #0055ff;
+            --dark: #0f172a;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .hub-container {
+            width: 90%;
+            max-width: 1000px;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        header {
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -1px;
+        }
+
+        .status-tag {
+            display: inline-block;
+            background: #e0f2fe;
+            color: var(--primary);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        /* --- NAVIGATION GRID --- */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .nav-card {
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid #e2e8f0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 85, 255, 0.08);
+        }
+
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            background: var(--light-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+            background: #f1f5f9;
+            transition: background 0.3s;
+        }
+
+        .nav-card:hover .icon-circle {
+            background: var(--primary);
+            color: white;
+        }
+
+        h3 {
+            margin: 10px 0;
+            font-size: 1.25rem;
+        }
+
+        p {
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hub-container">
+        <header>
+            <h1>HYDROSOL</h1>
+            <div class="status-tag">Digital System</div>
+        </header>
+
+        <div class="nav-grid">
+            <a href="simulation.html" class="nav-card">
+                <div class="icon-circle">⚙️</div>
+                <h3>Simulation</h3>
+                <p>Live hardware status, component wear, and repair interface.</p>
+            </a>
+
+            <a href="3dmodel.html" class="nav-card">
+                <div class="icon-circle">🧊</div>
+                <h3>3D Interactive</h3>
+                <p>High-fidelity WebGL model with bubble physics and lighting.</p>
+            </a>
+
+            <a href="2dviewer.html" class="nav-card">
+                <div class="icon-circle">📐</div>
+                <h3>2D Perspectives</h3>
+                <p>Detailed technical blueprints and multi-angle hardware views.</p>
+            </a>
+
+            <a href="manual.html" class="nav-card">
+                <div class="icon-circle">📖</div>
+                <h3>User Manual</h3>
+                <p>Complete documentation for operation and maintenance.</p>
+            </a>
+        </div>
+
+        <footer>
+            © 2026 SunSip. All technical data is synchronized.
+        </footer>
+    </div>
+
+</body>
+</html>
