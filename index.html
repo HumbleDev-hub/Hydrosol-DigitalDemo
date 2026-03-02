@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hydrosol | Command Center</title>
+    <title>SunSip | Hydrosol Command</title>
     <style>
         :root {
             --primary: #0055ff;
+            --secondary: #00f2ff;
             --dark: #0f172a;
             --bg: #f8fafc;
             --card-bg: #ffffff;
@@ -24,47 +25,79 @@
             min-height: 100vh;
         }
 
+        /* --- BRANDING: TOP LEFT LOGO --- */
+        .app-logo {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            width: 140px; 
+            height: auto;
+            z-index: 1000;
+            cursor: pointer;
+            transition: filter 0.3s ease, transform 0.3s ease;
+        }
+
+        .app-logo:hover {
+            filter: drop-shadow(0 0 8px rgba(0, 85, 255, 0.4));
+            transform: scale(1.05);
+        }
+
         .hub-container {
             width: 90%;
-            max-width: 1000px;
+            max-width: 1100px;
             text-align: center;
             padding: 40px 0;
         }
 
+        /* --- HEADER SECTION --- */
         header {
             margin-bottom: 50px;
         }
 
+        .brand-subtitle {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
+        }
+
         h1 {
-            font-size: 2.8rem;
-            font-weight: 800;
+            font-size: 3.5rem;
+            font-weight: 900;
             margin: 0;
-            letter-spacing: -1px;
+            letter-spacing: -2px;
+            background: linear-gradient(90deg, var(--dark), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .status-tag {
             display: inline-block;
             background: #e0f2fe;
             color: var(--primary);
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 800;
             text-transform: uppercase;
-            margin-top: 10px;
+            margin-top: 15px;
+            border: 1px solid rgba(0, 85, 255, 0.1);
         }
 
         /* --- NAVIGATION GRID --- */
         .nav-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
         }
 
         .nav-card {
             background: var(--card-bg);
-            padding: 40px 30px;
-            border-radius: 20px;
+            padding: 45px 30px;
+            border-radius: 24px;
             text-decoration: none;
             color: inherit;
             border: 1px solid #e2e8f0;
@@ -72,96 +105,107 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
         .nav-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-12px);
             border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(0, 85, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 85, 255, 0.15);
         }
 
         .icon-circle {
-            width: 70px;
-            height: 70px;
-            background: var(--light-blue);
-            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            background: #f1f5f9;
+            border-radius: 24px; /* Squircle look */
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            margin-bottom: 20px;
-            background: #f1f5f9;
-            transition: background 0.3s;
+            font-size: 36px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
         }
 
         .nav-card:hover .icon-circle {
             background: var(--primary);
             color: white;
+            transform: rotate(-5deg) scale(1.1);
         }
 
         h3 {
-            margin: 10px 0;
-            font-size: 1.25rem;
+            margin: 0 0 10px 0;
+            font-size: 1.4rem;
+            font-weight: 700;
         }
 
         p {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #64748b;
-            line-height: 1.5;
+            line-height: 1.6;
             margin: 0;
         }
 
+        /* --- FOOTER --- */
         footer {
-            margin-top: 60px;
-            font-size: 0.8rem;
+            margin-top: 80px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.85rem;
             color: #94a3b8;
+        }
+
+        .sunsip-accent {
+            color: var(--primary);
+            font-weight: 700;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <img src="logo.png" alt="SunSip Logo" class="logo">
-        <span class="brand-name">SunSip Water Systems</span>
-    </div>
+    <img src="logo.png" alt="SunSip Water Systems" class="app-logo">
 
     <div class="hub-container">
         <header>
+            <span class="brand-subtitle">SunSip Water Systems</span>
             <h1>HYDROSOL</h1>
-            <div class="status-tag">Digital System</div>
         </header>
 
         <div class="nav-grid">
             <a href="Simulation.html" class="nav-card">
                 <div class="icon-circle">⚙️</div>
                 <h3>Simulation</h3>
-                <p>Live hardware status, component wear, and repair interface.</p>
+                <p>Live diagnostic data, component health, and real-time repair simulation.</p>
             </a>
 
             <a href="3dmodel.html" class="nav-card">
                 <div class="icon-circle">🧊</div>
                 <h3>3D Interactive</h3>
-                <p>High-fidelity WebGL model with bubble physics and lighting.</p>
+                <p>Exploded views and interactive 3D anatomy of the MS-2000 unit.</p>
             </a>
 
             <a href="2dviewer.html" class="nav-card">
                 <div class="icon-circle">📐</div>
-                <h3>2D Perspectives</h3>
-                <p>Detailed technical blueprints and multi-angle hardware views.</p>
+                <h3>Technical</h3>
+                <p>Full CAD blueprints, plumbing schematics, and electrical layouts.</p>
             </a>
 
             <a href="manual.html" class="nav-card">
                 <div class="icon-circle">📖</div>
-                <h3>User Manual</h3>
-                <p>Complete documentation for operation and maintenance.</p>
+                <h3>Manuals</h3>
+                <p>Certified operator documentation and SunSip maintenance guides.</p>
             </a>
         </div>
 
         <footer>
-            © 2026 SunSip Water Systems. All technical data is synchronized.
+            © 2026 <span class="sunsip-accent">SunSip Water Systems</span>. 
+            Proprietary technology developed for sustainable purification.
         </footer>
     </div>
 
 </body>
 </html>
+</body>
+</html>
+
 
