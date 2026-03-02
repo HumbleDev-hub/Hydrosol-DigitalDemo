@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HS-2000 | Interactive View</title>
     <style>
         :root {
@@ -20,7 +20,7 @@
             align-items: center;
             justify-content: center;
             background: radial-gradient(circle at center, #ffffff 0%, #e2e8f0 100%);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             overflow: hidden;
             perspective: 1500px;
         }
@@ -28,15 +28,15 @@
         /* --- THE BACK NAV --- */
         .back-nav {
             position: fixed;
-            bottom: 30px;
-            left: 30px;
+            bottom: 20px;
+            left: 20px;
             z-index: 1000;
             text-decoration: none;
             background: #000;
             color: #fff;
-            padding: 12px 20px;
+            padding: 10px 16px;
             border-radius: 50px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
             letter-spacing: 1px;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -50,22 +50,33 @@
 
         h1 {
             position: absolute;
-            top: 40px;
-            font-size: 1.2rem;
+            top: 20px;
+            font-size: 1rem;
             letter-spacing: 2px;
             color: var(--dark);
             margin: 0;
+            text-align: center;
+            width: 100%;
         }
 
         /* --- 3D STAGE --- */
         .stage {
-            width: 400px;
-            height: 500px;
+            width: 100%;
+            height: 100%;
             position: relative;
             transform-style: preserve-3d;
             display: flex;
             align-items: center;
             justify-content: center;
+            /* Scale down on mobile */
+            transform: scale(0.6); 
+        }
+
+        @media (min-width: 600px) {
+            .stage { transform: scale(0.8); }
+        }
+        @media (min-width: 900px) {
+            .stage { transform: scale(1); }
         }
 
         #rotation-wrapper {
@@ -85,15 +96,8 @@
         }
 
         @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-15px);
-            }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
 
         /* --- FACES --- */
@@ -118,23 +122,10 @@
         }
 
         /* Spatial Positioning */
-        .front {
-            transform: rotateY(0deg) translateZ(160px);
-        }
-
-        .back {
-            transform: rotateY(180deg) translateZ(160px);
-        }
-
-        .top {
-            transform: rotateX(90deg) translateZ(160px);
-            height: 320px;
-        }
-
-        .bottom {
-            transform: rotateX(-90deg) translateZ(260px);
-            height: 320px;
-        }
+        .front { transform: rotateY(0deg) translateZ(160px); }
+        .back { transform: rotateY(180deg) translateZ(160px); }
+        .top { transform: rotateX(90deg) translateZ(160px); height: 320px; }
+        .bottom { transform: rotateX(-90deg) translateZ(260px); height: 320px; }
 
         /* Glass Sides */
         .side {
@@ -145,14 +136,8 @@
             opacity: 0.8;
             border-radius: 4px;
         }
-
-        .right {
-            transform: rotateY(90deg) translateZ(160px);
-        }
-
-        .left {
-            transform: rotateY(-90deg) translateZ(160px);
-        }
+        .right { transform: rotateY(90deg) translateZ(160px); }
+        .left { transform: rotateY(-90deg) translateZ(160px); }
 
         /* --- SHADOW --- */
         .shadow {
@@ -169,24 +154,26 @@
         /* --- CONTROLS --- */
         .controls {
             position: absolute;
-            bottom: 100px;
+            bottom: 20px;
             display: flex;
-            gap: 10px;
+            gap: 5px;
             background: rgba(255, 255, 255, 0.8);
-            padding: 8px;
+            padding: 5px;
             border-radius: 50px;
             backdrop-filter: blur(10px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             z-index: 20;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         button {
-            padding: 10px 20px;
+            padding: 8px 15px;
             border: none;
             background: transparent;
             color: #64748b;
             font-weight: 700;
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
             cursor: pointer;
             border-radius: 40px;
@@ -201,19 +188,38 @@
         /* --- INFO PANEL --- */
         .info-card {
             position: absolute;
-            right: 40px;
-            width: 250px;
-            padding: 25px;
-            background: white;
+            bottom: 80px; /* Positioned above controls on mobile */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 300px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             border-left: 4px solid var(--primary);
             z-index: 20;
+            backdrop-filter: blur(5px);
+        }
+
+        @media (min-width: 768px) {
+            .info-card {
+                top: 80px;
+                right: 20px;
+                left: auto;
+                transform: none;
+                width: 250px;
+            }
+            .controls {
+                bottom: 30px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
         }
 
         .info-card h4 {
-            margin: 0 0 10px;
-            font-size: 14px;
+            margin: 0 0 8px;
+            font-size: 13px;
             color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -221,9 +227,9 @@
 
         .info-card p {
             margin: 0;
-            font-size: 13px;
+            font-size: 12px;
             color: #475569;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         /* --- HOTSPOTS --- */
@@ -241,59 +247,40 @@
             animation: pulse 2s infinite;
         }
 
-        .hotspot:hover {
-            transform: scale(1.3);
-        }
+        .hotspot:hover { transform: scale(1.3); }
 
         @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(0, 242, 255, 0.7);
-            }
-
-            70% {
-                box-shadow: 0 0 0 10px rgba(0, 242, 255, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(0, 242, 255, 0);
-            }
+            0% { box-shadow: 0 0 0 0 rgba(0, 242, 255, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 242, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 242, 255, 0); }
         }
 
         /* --- HEADER LOGO --- */
         .header {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 10px;
+            left: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 5px;
             z-index: 100;
         }
 
-        .logo {
-            height: 80px;
-            /* Adjust size as needed */
-            width: auto;
-        }
-
-        .brand-name {
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: var(--dark);
-            letter-spacing: 1px;
-        }
+        .logo { height: 40px; width: auto; }
+        .brand-name { font-size: 0.8rem; font-weight: 800; color: var(--dark); letter-spacing: 1px; display: none; }
+        @media (min-width: 500px) { .brand-name { display: block; } .logo { height: 60px; } }
     </style>
 </head>
 
 <body>
 
-    <a href="index.html" class="back-nav">← BACK TO HUB</a>
+    <a href="index.html" class="back-nav">← HUB</a>
 
-    <h1>HS-2000 PARTS VIEWER</h1>
+    <h1>PARTS VIEWER</h1>
 
     <div class="header">
         <img src="logo.png" alt="SunSip Logo" class="logo">
-        <span class="brand-name">SunSip Water Systems</span>
+        <span class="brand-name">SunSip</span>
     </div>
 
     <div class="stage">
@@ -301,21 +288,21 @@
         <div id="rotation-wrapper">
             <div id="hydrosol-model">
                 <div class="face front">
-                    <img src="hydrosol-front-view.png">
+                    <img src="hydrosol-front-view.png" alt="Front View">
                     <div class="hotspot" style="top: 55%; left: 45%;"
                         onclick="showInfo('Cleaning System', 'Contains the filter and UV light to remove germs and dirt.')">
                     </div>
                 </div>
 
                 <div class="face back">
-                    <img src="hydrosol-back-view.png">
+                    <img src="hydrosol-back-view.png" alt="Back View">
                     <div class="hotspot" style="top: 63%; left: 30%;"
                         onclick="showInfo('Power Cable Plug', 'Where you plug in the USB-C cable to charge the machine.')">
                     </div>
                 </div>
 
-                <div class="face top"><img src="hydrosol-top-view.png"></div>
-                <div class="face bottom"><img src="hydrosol-bottom-view.png"></div>
+                <div class="face top"><img src="hydrosol-top-view.png" alt="Top View"></div>
+                <div class="face bottom"><img src="hydrosol-bottom-view.png" alt="Bottom View"></div>
 
                 <div class="side left"></div>
                 <div class="side right"></div>
@@ -325,8 +312,7 @@
 
     <div class="info-card">
         <h4 id="view-title">Front View</h4>
-        <p id="view-desc">Click on the <span style="color:var(--accent); font-weight:bold;">glowing blue dots</span> to
-            learn about each part.</p>
+        <p id="view-desc">Click on the <span style="color:var(--primary); font-weight:bold;">blue dots</span> to learn about each part.</p>
     </div>
 
     <div class="controls">
@@ -341,36 +327,29 @@
         const title = document.getElementById('view-title');
         const desc = document.getElementById('view-desc');
 
-        // ... inside your <script> tag
-
         function rotateTo(view, btn) {
-            document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
             switch (view) {
                 case 'front':
                     wrapper.style.transform = 'rotateY(0deg) rotateX(0deg)';
-                    // Update title and description here
                     updateText("Front View", "Shows the water tank and screen.");
                     break;
                 case 'back':
                     wrapper.style.transform = 'rotateY(180deg) rotateX(0deg)';
-                    // Update title and description here
                     updateText("Back View", "Shows where the power cable plugs in.");
                     break;
                 case 'top':
                     wrapper.style.transform = 'rotateX(-90deg) rotateY(0deg)';
-                    // Update title and description here
                     updateText("Top View", "Shows the solar panels that charge the battery.");
                     break;
                 case 'bottom':
                     wrapper.style.transform = 'rotateX(90deg) rotateY(0deg)';
-                    // Update title and description here
                     updateText("Bottom View", "Shows the water intake valves.");
                     break;
             }
         }
-        // ...
 
         function showInfo(t, d) {
             title.innerText = t;
@@ -383,5 +362,4 @@
         }
     </script>
 </body>
-
 </html>
