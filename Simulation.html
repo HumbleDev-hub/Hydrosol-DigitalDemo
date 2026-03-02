@@ -9,10 +9,8 @@
             --primary: #0055ff;
             --danger: #ff3e3e;
             --success: #00ff88;
-            /* Changed dark to white for background */
             --bg-color: #ffffff;
             --text-main: #0f172a;
-            /* Light gray panels for contrast on white bg */
             --panel: #f1f5f9;
             --text-dim: #475569;
         }
@@ -20,7 +18,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: var(--bg-color);
             color: var(--text-main);
             display: flex;
@@ -33,25 +31,24 @@
         /* --- BRANDING --- */
         .app-logo {
             position: fixed;
-            top: 25px;
-            left: 25px;
-            width: 120px;
+            top: 20px;
+            left: 20px;
+            width: 100px;
             z-index: 1000;
         }
 
         .back-nav {
             position: fixed;
-            bottom: 30px;
-            left: 30px;
+            bottom: 20px;
+            left: 20px;
             z-index: 1000;
             text-decoration: none;
-            /* Dark back button for white bg */
             background: #0f172a;
             color: #fff;
-            padding: 12px 20px;
+            padding: 10px 18px;
             border-radius: 50px;
             font-weight: bold;
-            font-size: 11px;
+            font-size: 10px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(0,0,0,0.1);
             transition: all 0.3s;
@@ -61,21 +58,27 @@
         /* --- DASHBOARD HEADER --- */
         .dashboard-header {
             text-align: center;
-            margin-top: 60px;
-            margin-bottom: 40px;
+            margin-top: 80px; /* Space for logo */
+            margin-bottom: 30px;
+            width: 90%;
         }
 
-        h1 { font-size: 2.5rem; letter-spacing: 4px; margin: 0; color: var(--primary); }
+        h1 { 
+            font-size: 2.2rem; 
+            letter-spacing: 2px; 
+            margin: 0; 
+            color: var(--primary); 
+        }
         
         .status-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
             background: rgba(0, 255, 136, 0.1);
-            color: #047857; /* Darker green for contrast */
+            color: #047857;
             padding: 5px 15px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 800;
             margin-top: 10px;
             border: 1px solid var(--success);
@@ -93,18 +96,26 @@
         /* --- MAIN SIMULATION HUB --- */
         .simulation-grid {
             display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 30px;
+            grid-template-columns: 1fr; /* Mobile First */
+            gap: 20px;
             width: 90%;
             max-width: 1200px;
+            padding-bottom: 80px; /* Space for nav button */
+        }
+
+        /* Tablet and Desktop Layout */
+        @media (min-width: 900px) {
+            .simulation-grid {
+                grid-template-columns: 1fr 350px;
+            }
         }
 
         .hardware-visual {
             background: var(--panel);
             border-radius: 24px;
-            padding: 40px;
+            padding: 30px;
             position: relative;
-            border: 1px solid #e2e8f0; /* Light border */
+            border: 1px solid #e2e8f0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -113,41 +124,48 @@
         .unit-image-wrapper {
             position: relative;
             width: 100%;
-            max-width: 400px;
-            transition: transform 0.3s ease;
+            max-width: 350px;
+            margin: 20px 0;
         }
 
         .unit-base-img {
             width: 100%;
-            filter: drop-shadow(0 0 15px rgba(0, 85, 255, 0.1));
+            filter: drop-shadow(0 0 10px rgba(0, 85, 255, 0.05));
         }
 
         /* --- INTERACTIVE HOTSPOTS --- */
         .hotspot {
             position: absolute;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border: 2px solid var(--primary);
-            padding: 10px;
+            padding: 8px;
             border-radius: 12px;
             cursor: pointer;
             backdrop-filter: blur(5px);
             transition: all 0.3s;
-            width: 120px;
+            width: 100px;
             color: var(--text-main);
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
         }
 
-        .hotspot:hover { transform: scale(1.1); background: var(--primary); color: white; }
+        .hotspot:hover { transform: scale(1.05); background: var(--primary); color: white; }
 
-        #carbon-zone { top: 20%; left: -60px; }
-        #uv-zone { bottom: 30%; right: -60px; }
+        /* Responsive hotspot positioning */
+        #carbon-zone { top: 20%; left: -30px; }
+        #uv-zone { bottom: 20%; right: -30px; }
+        
+        @media (min-width: 500px) {
+            #carbon-zone { left: -50px; }
+            #uv-zone { right: -50px; }
+        }
 
         .health-bar-bg {
             width: 100%;
-            height: 6px;
+            height: 5px;
             background: #cbd5e1;
             border-radius: 3px;
-            margin-top: 8px;
+            margin-top: 6px;
             overflow: hidden;
         }
 
@@ -165,7 +183,7 @@
 
         .card {
             background: var(--panel);
-            padding: 25px;
+            padding: 20px;
             border-radius: 20px;
             border: 1px solid #e2e8f0;
             color: var(--text-main);
@@ -175,8 +193,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            font-size: 0.9rem;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
         }
 
         button {
@@ -187,6 +205,7 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 700;
+            font-size: 0.85rem;
             transition: opacity 0.2s;
         }
 
@@ -194,11 +213,11 @@
 
         .console {
             background: #000;
-            height: 200px;
+            height: 150px;
             border-radius: 12px;
             padding: 15px;
             font-family: 'Courier New', monospace;
-            font-size: 12px;
+            font-size: 11px;
             color: var(--success);
             overflow-y: auto;
             border: 1px solid #333;
@@ -212,7 +231,7 @@
 <body>
 
     <img src="logo.png" alt="SunSip" class="app-logo">
-    <a href="index.html" class="back-nav">← BACK TO HUB</a>
+    <a href="index.html" class="back-nav">← HUB</a>
 
     <div class="dashboard-header">
         <h1>HYDROSOL</h1>
@@ -220,7 +239,9 @@
             <div class="status-dot" id="status-dot"></div>
             <span id="status-text">SYSTEM OPTIMAL</span>
         </div>
-        <p style="color: var(--text-dim);">Purified Volume: <span id="liters-val" style="color: var(--text-main); font-weight: bold;">0</span> Liters</p>
+        <p style="color: var(--text-dim); margin-top: 5px; font-size: 0.9rem;">
+            Volume: <span id="liters-val" style="color: var(--text-main); font-weight: bold;">0</span> L
+        </p>
     </div>
 
     <div class="simulation-grid">
@@ -229,18 +250,15 @@
                 <img src="hydrosol-front-view.png" alt="Unit" class="unit-base-img">
                 
                 <div id="carbon-zone" class="hotspot" onclick="repair('carbon')">
-                    <span style="font-size: 10px; font-weight: bold;">CARBON POD</span>
+                    <span style="font-size: 9px; font-weight: bold;">CARBON POD</span>
                     <div class="health-bar-bg"><div id="bar-carbon" class="health-fill"></div></div>
                 </div>
 
                 <div id="uv-zone" class="hotspot" onclick="repair('uv')">
-                    <span style="font-size: 10px; font-weight: bold;">UV-C PATHWAY</span>
+                    <span style="font-size: 9px; font-weight: bold;">UV-C PATHWAY</span>
                     <div class="health-bar-bg"><div id="bar-uv" class="health-fill"></div></div>
                 </div>
             </div>
-            <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 40px;">
-                <i>Interact with hotspots to perform "Snap-In" maintenance.</i>
-            </p>
         </div>
 
         <div class="side-panel">
@@ -258,7 +276,7 @@
 
             <div class="card">
                 <h4 style="margin: 0 0 15px 0;">⚙️ Operations</h4>
-                <button style="width: 100%; margin-bottom: 10px;" onclick="processWater(50)">Process 50L Batch</button>
+                <button style="width: 100%; margin-bottom: 10px;" onclick="processWater(50)">Process 50L</button>
                 <button style="width: 100%; background: #475569;" onclick="toggleAuto()">Toggle Auto-Wear</button>
             </div>
 
@@ -316,7 +334,7 @@
 
         function processWater(amt) {
             if(state.carbonHealth <= 0 || state.uvHealth <= 0) {
-                log("ERROR: Maintenance required before processing.");
+                log("ERROR: Maintenance required.");
                 return;
             }
             state.liters += amt;
@@ -335,13 +353,13 @@
             if(type === 'carbon' && state.invCarbon > 0) {
                 state.carbonHealth = 100;
                 state.invCarbon--;
-                log("Carbon Pod Snap-In Successful.");
+                log("Carbon Pod installed.");
             } else if (type === 'uv' && state.invUv > 0) {
                 state.uvHealth = 100;
                 state.invUv--;
-                log("UV-C Bulb Replacement Successful.");
+                log("UV-C Bulb replaced.");
             } else {
-                log("REPAIR FAILED: No spare parts in inventory.");
+                log("REPAIR FAILED: No parts.");
             }
             updateUI();
         }
@@ -349,13 +367,13 @@
         function order(type) {
             if(type === 'carbon') state.invCarbon++;
             if(type === 'uv') state.invUv++;
-            log(`Order placed: 1x ${type.toUpperCase()} module.`);
+            log(`Order placed: 1x ${type.toUpperCase()}.`);
             updateUI();
         }
 
         function toggleAuto() {
             state.autoWear = !state.autoWear;
-            log(`Auto-Sim mode: ${state.autoWear ? 'ACTIVE' : 'OFF'}`);
+            log(`Auto-Sim: ${state.autoWear ? 'ON' : 'OFF'}`);
         }
 
         // Auto-simulation Loop
