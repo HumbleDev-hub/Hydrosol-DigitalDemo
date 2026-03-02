@@ -2,96 +2,367 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hydrosol | Hardware Simulation</title>
-    <link rel="stylesheet" href="Style.css">
     <style>
-        /* Back button to return to index.html */
+        :root {
+            --primary: #0055ff;
+            --danger: #ff3e3e;
+            --success: #00ff88;
+            /* Changed dark to white for background */
+            --bg-color: #ffffff;
+            --text-main: #0f172a;
+            /* Light gray panels for contrast on white bg */
+            --panel: #f1f5f9;
+            --text-dim: #475569;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- BRANDING --- */
+        .app-logo {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            width: 120px;
+            z-index: 1000;
+        }
+
         .back-nav {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            bottom: 30px;
+            left: 30px;
             z-index: 1000;
             text-decoration: none;
-            background: #000;
+            /* Dark back button for white bg */
+            background: #0f172a;
             color: #fff;
-            padding: 10px 15px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-family: sans-serif;
-            border: 1px solid #444;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 11px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,0,0,0.1);
+            transition: all 0.3s;
         }
+        .back-nav:hover { background: var(--primary); }
+
+        /* --- DASHBOARD HEADER --- */
+        .dashboard-header {
+            text-align: center;
+            margin-top: 60px;
+            margin-bottom: 40px;
+        }
+
+        h1 { font-size: 2.5rem; letter-spacing: 4px; margin: 0; color: var(--primary); }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 255, 136, 0.1);
+            color: #047857; /* Darker green for contrast */
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            margin-top: 10px;
+            border: 1px solid var(--success);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--success);
+            animation: pulse 1.5s infinite;
+        }
+
+        /* --- MAIN SIMULATION HUB --- */
+        .simulation-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .hardware-visual {
+            background: var(--panel);
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+            border: 1px solid #e2e8f0; /* Light border */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .unit-image-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            transition: transform 0.3s ease;
+        }
+
+        .unit-base-img {
+            width: 100%;
+            filter: drop-shadow(0 0 15px rgba(0, 85, 255, 0.1));
+        }
+
+        /* --- INTERACTIVE HOTSPOTS --- */
+        .hotspot {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid var(--primary);
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s;
+            width: 120px;
+            color: var(--text-main);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .hotspot:hover { transform: scale(1.1); background: var(--primary); color: white; }
+
+        #carbon-zone { top: 20%; left: -60px; }
+        #uv-zone { bottom: 30%; right: -60px; }
+
+        .health-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: #cbd5e1;
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .health-fill {
+            height: 100%;
+            width: 100%;
+            background: var(--success);
+            transition: width 0.5s ease;
+        }
+
+        .low-health { background: var(--danger) !important; animation: flash 0.5s infinite; }
+
+        /* --- SIDE CONTROLS --- */
+        .side-panel { display: flex; flex-direction: column; gap: 20px; }
+
+        .card {
+            background: var(--panel);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            color: var(--text-main);
+        }
+
+        .inventory-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: opacity 0.2s;
+        }
+
+        button:hover { opacity: 0.8; }
+
+        .console {
+            background: #000;
+            height: 200px;
+            border-radius: 12px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: var(--success);
+            overflow-y: auto;
+            border: 1px solid #333;
+        }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        @keyframes flash { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
     </style>
 </head>
 <body>
-   <a href="index.html" style="position: fixed; top: 20px; left: 20px; z-index: 9999; text-decoration: none; background: #000; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; font-family: sans-serif; font-size: 12px; border: 1px solid #444;">← HUB</a>
 
-    <div class="dashboard">
+    <img src="logo.png" alt="SunSip" class="app-logo">
+    <a href="index.html" class="back-nav">← BACK TO HUB</a>
+
+    <div class="dashboard-header">
         <h1>HYDROSOL</h1>
-        <div id="status-light" class="light green"></div>
-        <h2 id="status-text">SYSTEM OPTIMAL</h2>
-        <div class="impact-stats">
-            <p>Total Purified: <span id="liters-val">0 L</span></p>
+        <div class="status-badge">
+            <div class="status-dot" id="status-dot"></div>
+            <span id="status-text">SYSTEM OPTIMAL</span>
         </div>
+        <p style="color: var(--text-dim);">Purified Volume: <span id="liters-val" style="color: var(--text-main); font-weight: bold;">0</span> Liters</p>
     </div>
 
-    <div class="simulation-hub">
-        <div class="hardware-container">
-            <h3>Physical Unit Interface</h3>
-            <a href="2dviewer.html" target="_self" style="text-decoration: none; cursor: zoom-in;">
-                <div class="unit-image-wrapper">
-                    <img src="hydrosol-front-view.png" alt="Hydrosol Unit" class="unit-base-img">
-                    
-                    <div id="carbon-zone" class="hotspot" onclick="event.stopPropagation(); attemptRepair('carbon')">
-                        <span class="label">Carbon Pod</span> <div class="mini-bar"><div id="bar-carbon" class="fill"></div></div>
-                    </div>
-
-                    <div id="uv-zone" class="hotspot" onclick="event.stopPropagation(); attemptRepair('uv')">
-                        <span class="label">UV-C Safety</span> <div class="mini-bar"><div id="bar-uv" class="fill"></div></div>
-                    </div>
+    <div class="simulation-grid">
+        <div class="hardware-visual">
+            <div class="unit-image-wrapper">
+                <img src="hydrosol-front-view.png" alt="Unit" class="unit-base-img">
+                
+                <div id="carbon-zone" class="hotspot" onclick="repair('carbon')">
+                    <span style="font-size: 10px; font-weight: bold;">CARBON POD</span>
+                    <div class="health-bar-bg"><div id="bar-carbon" class="health-fill"></div></div>
                 </div>
-            </a>
-            <p class="hint"><i>Tap a blinking component to snap-in a replacement.</i></p>
-            <p class="hint"><i>Click the unit to open the Multi-Side 360° Gallery.</i></p>
+
+                <div id="uv-zone" class="hotspot" onclick="repair('uv')">
+                    <span style="font-size: 10px; font-weight: bold;">UV-C PATHWAY</span>
+                    <div class="health-bar-bg"><div id="bar-uv" class="health-fill"></div></div>
+                </div>
+            </div>
+            <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 40px;">
+                <i>Interact with hotspots to perform "Snap-In" maintenance.</i>
+            </p>
         </div>
 
         <div class="side-panel">
-            <div class="inventory-card">
-                <h4>📦 Spare Parts Kit</h4>
+            <div class="card">
+                <h4 style="margin: 0 0 15px 0;">📦 Inventory</h4>
                 <div class="inventory-item">
-                    <span>Carbon: <strong id="inv-carbon">2</strong></span>
-                    <button onclick="buyPod('carbon')">+ Order</button>
+                    <span>Carbon Pods: <b id="inv-carbon">2</b></span>
+                    <button onclick="order('carbon')">Order</button>
                 </div>
                 <div class="inventory-item">
-                    <span>UV-C: <strong id="inv-uv">1</strong></span>
-                    <button onclick="buyPod('uv')">+ Order</button>
+                    <span>UV-C Bulbs: <b id="inv-uv">1</b></span>
+                    <button onclick="order('uv')">Order</button>
                 </div>
             </div>
 
-            <div class="controls-panel">
-                <button class="action-btn" onclick="drainSystem(10)">🚰 Process 10L Water</button>
-                <button class="action-btn" onclick="toggleAutoSim()">🔄 Toggle Auto-Wear</button>
+            <div class="card">
+                <h4 style="margin: 0 0 15px 0;">⚙️ Operations</h4>
+                <button style="width: 100%; margin-bottom: 10px;" onclick="processWater(50)">Process 50L Batch</button>
+                <button style="width: 100%; background: #475569;" onclick="toggleAuto()">Toggle Auto-Wear</button>
             </div>
 
-            <div class="system-log">
-                <h3>Diagnostic Console</h3> 
-                <div id="console-output">> Hardware Link Established... [READY]</div>
+            <div class="console" id="console">
+                > Initializing Hardware Link...<br>
+                > SunSip Solar-Active Grid: ONLINE<br>
+                > Ready for Telemetry Data.
             </div>
         </div>
     </div>
 
-    <div id="manual-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeManual()">&times;</span>
-            <h2>⚠️ REPAIR REQUIRED</h2>
-            <div class="manual-steps">
-                <div class="step">1. 🛒 Ensure you have spare parts.</div>
-                <div class="step">2. 🔴 Locate the blinking pod on the unit.</div>
-                <div class="step">3. 👆 Click it to 'Snap-In' the new one.</div>
-            </div>
-        </div>
-    </div>
+    <script>
+        // --- DATA STATE ---
+        let state = {
+            liters: 0,
+            carbonHealth: 100,
+            uvHealth: 100,
+            invCarbon: 2,
+            invUv: 1,
+            autoWear: false
+        };
 
-    <script src="Script.js"></script>
+        // --- CORE FUNCTIONS ---
+        function log(msg) {
+            const consoleBox = document.getElementById('console');
+            consoleBox.innerHTML += `<br>> ${msg}`;
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        function updateUI() {
+            // Update Text
+            document.getElementById('liters-val').innerText = state.liters;
+            document.getElementById('inv-carbon').innerText = state.invCarbon;
+            document.getElementById('inv-uv').innerText = state.invUv;
+
+            // Update Bars
+            const cBar = document.getElementById('bar-carbon');
+            const uBar = document.getElementById('bar-uv');
+            cBar.style.width = state.carbonHealth + '%';
+            uBar.style.width = state.uvHealth + '%';
+
+            // Warning Colors
+            state.carbonHealth < 25 ? cBar.classList.add('low-health') : cBar.classList.remove('low-health');
+            state.uvHealth < 25 ? uBar.classList.add('low-health') : uBar.classList.remove('low-health');
+
+            // Global Status
+            if(state.carbonHealth <= 0 || state.uvHealth <= 0) {
+                document.getElementById('status-text').innerText = "SYSTEM CRITICAL";
+                document.getElementById('status-dot').style.background = "var(--danger)";
+            } else {
+                document.getElementById('status-text').innerText = "SYSTEM OPTIMAL";
+                document.getElementById('status-dot').style.background = "var(--success)";
+            }
+        }
+
+        function processWater(amt) {
+            if(state.carbonHealth <= 0 || state.uvHealth <= 0) {
+                log("ERROR: Maintenance required before processing.");
+                return;
+            }
+            state.liters += amt;
+            state.carbonHealth -= (amt * 0.2);
+            state.uvHealth -= (amt * 0.1);
+            
+            // Clamp at 0
+            if(state.carbonHealth < 0) state.carbonHealth = 0;
+            if(state.uvHealth < 0) state.uvHealth = 0;
+
+            log(`Processed ${amt}L. Telemetry updated.`);
+            updateUI();
+        }
+
+        function repair(type) {
+            if(type === 'carbon' && state.invCarbon > 0) {
+                state.carbonHealth = 100;
+                state.invCarbon--;
+                log("Carbon Pod Snap-In Successful.");
+            } else if (type === 'uv' && state.invUv > 0) {
+                state.uvHealth = 100;
+                state.invUv--;
+                log("UV-C Bulb Replacement Successful.");
+            } else {
+                log("REPAIR FAILED: No spare parts in inventory.");
+            }
+            updateUI();
+        }
+
+        function order(type) {
+            if(type === 'carbon') state.invCarbon++;
+            if(type === 'uv') state.invUv++;
+            log(`Order placed: 1x ${type.toUpperCase()} module.`);
+            updateUI();
+        }
+
+        function toggleAuto() {
+            state.autoWear = !state.autoWear;
+            log(`Auto-Sim mode: ${state.autoWear ? 'ACTIVE' : 'OFF'}`);
+        }
+
+        // Auto-simulation Loop
+        setInterval(() => {
+            if(state.autoWear) processWater(1);
+        }, 1000);
+
+    </script>
 </body>
-
 </html>
