@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Manual | Hydrosol HS-2000</title>
+    <title>User Manual | Hydrosol</title>
     <style>
         :root {
             --primary: #0055ff;
@@ -120,10 +120,30 @@
     </style>
 </head>
 <body>
-    <a href="index.html" style="position: fixed; top: 20px; left: 20px; z-index: 9999; text-decoration: none; background: #000; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; font-family: sans-serif; font-size: 12px; border: 1px solid #444;">← HUB</a>
+    </head>
+
+<body>
+    <a href="index.html" style="
+    position: fixed; 
+    bottom: 30px; 
+    left: 30px; 
+    z-index: 9999; 
+    text-decoration: none; 
+    background: rgba(0, 0, 0, 0.8); 
+    color: #fff; 
+    padding: 12px 18px; 
+    border-radius: 50px; 
+    font-weight: bold; 
+    font-family: sans-serif; 
+    font-size: 11px; 
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+">← BACK TO HUB</a>
+
 
     <nav>
-        <div class="nav-logo">HYDROSOL HS-2000</div>
+        <div class="nav-logo">HYDROSOL</div>
         <ul>
             <li><a href="#introduction">01. Introduction</a></li>
             <li><a href="#specifications">02. Technical Specs</a></li>
@@ -131,14 +151,15 @@
             <li><a href="#operation">04. Device Operation</a></li>
             <li><a href="#maintenance">05. Maintenance Guide</a></li>
             <li><a href="#troubleshooting">06. Troubleshooting</a></li>
+            <li><a href="#glossary">07. Glossary of Tech</a></li>
         </ul>
     </nav>
 
     <main>
         <section id="introduction">
             <p style="text-transform: uppercase; font-weight: bold; color: var(--primary); margin-bottom: 0;">Operational Manual</p>
-            <h1>Advanced Digital Twin Sterilization</h1>
-            <p>The Hydrosol HS-2000 is a state-of-the-art water purification and sterilization system utilizing multi-stage filtration and UV-C light technology. This manual provides the necessary steps for hardware integration and long-term upkeep.</p>
+            <h1>Advanced Digital Sterilization</h1>
+            <p>The Hydrosol is a state-of-the-art water purification and sterilization system utilizing multi-stage filtration and UV-C light technology. This manual provides the necessary steps for hardware integration and long-term upkeep.</p>
             
             <div class="alert alert-info">
                 <strong>Note:</strong> This model is equipped with a Solar-Active grid. Ensure the top panel has access to ambient or direct light for optimal battery health.
@@ -214,10 +235,53 @@
             </table>
         </section>
 
+        <section id="glossary">
+            <h2>Glossary of Technology</h2>
+            <p>Hydrosol utilizes proprietary SunSip engineering. Below are the definitions of the core technologies mentioned
+                throughout our ecosystem.</p>
+        
+            <div class="step-box" style="background: #fff; border: 1px solid var(--border);">
+                <h3 style="margin-top: 0;">Solar-Active Grid</h3>
+                <p>A high-efficiency photovoltaic array integrated directly into the top chassis. Unlike standard solar panels,
+                    the <strong>Solar-Active</strong> system is tuned to capture energy from both direct sunlight and high-lumen
+                    indoor ambient lighting, ensuring the internal battery remains topped off in various environments.</p>
+        
+                <h3>UV-C Sterilization (254 nm)</h3>
+                <p>The "C" band of ultraviolet light is germicidal. At the specific wavelength of <strong>254
+                        nanometers</strong>, the light penetrates the cellular walls of microorganisms and disrupts their
+                    DNA/RNA, rendering pathogens like bacteria and viruses unable to reproduce or cause infection.</p>
+        
+        
+        
+                <h3>Smoky Borosilicate Glass</h3>
+                <p>Our reservoirs are crafted from <strong>Borosilicate</strong>, a type of glass containing boron trioxide,
+                    which allows for a very low coefficient of thermal expansion. The "Smoky" tint isn't just aesthetic; it acts
+                    as a light filter to protect the purified water from algae-promoting UV rays found in natural sunlight.</p>
+        
+                <h3>Active Carbon Pod</h3>
+                <p>A chemical filtration stage using highly porous carbon. Through a process called <strong>adsorption</strong>,
+                    this pod "traps" organic compounds, chlorine, and sediment, significantly improving the taste and clarity of
+                    the water before it reaches the UV-C chamber.</p>
+        
+                <h3>Digital Command Center</h3>
+                <p>The cloud-synchronized interface that links your hardware to the Hydrosol web ecosystem. It provides
+                    <strong>Telemetry</strong> (real-time data) on your water purity, filter life, and energy harvesting rates.
+                </p>
+        
+        
+        
+                <h3>Pathogen Neutralization</h3>
+                <p>The scientific term for the result of UV-C exposure. Rather than "killing" organisms in the traditional
+                    sense, the HS-2000 <strong>neutralizes</strong> them, making them biologically inactive and harmless to the
+                    human digestive system.</p>
+            </div>
+        </section>
+
         <footer>
             © 2026 Hydrosol Industrial. All rights reserved. | HS-2000 Hardware Rev. B
         </footer>
     </main>
+    
 
     <script>
         // Smooth scrolling for navigation links
@@ -231,5 +295,4 @@
         });
     </script>
 </body>
-
 </html>
